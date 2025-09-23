@@ -1,12 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPA</title>
+    <title>Gestión de Usuarios</title>
 </head>
 <body>
-    
-    <script type="module" src="scripts/main.js"></script>
+    <h1>Sistema de Gestión de Usuarios</h1>
+
+    <div id="content-container">
+        <p>Selecciona una opción del menú</p>
+    </div>
+
+    <nav>
+        <button id="list-btn">Listar usuarios</button>
+        <button id="create-btn">Crear usuario</button>
+    </nav>
+    <script>
+        const listBtn = document.getElementById('list-btn');
+        const createBtn = document.getElementById('create-btn');
+        const contentContainer = document.getElementById('content-container');
+
+        const mostrarListaUsuarios = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/users');
+                
+                if (!response.ok) {
+                    throw new Error('Error al obtener la lista de usuarios');
+                }
+
+                const users = await response.json();
+
+                let usersHtml = `<h2>Listado de Usuarios</h2>`;
+                
+                if (users.length === 0) {
+                    usersHtml += `<p>No hay usuarios registrados.</p>`;
+                } else {
+                    usersHtml += `<ul>`;
+                    users.forEach(user => {
+                        usersHtml += `<li>${user.name} ${user.lastName} - ${user.email}</li>`;
+                    });
+                    usersHtml += `</ul>`;
+                }
+                
+                contentContainer.innerHTML = usersHtml;
+            } catch (error) {
+                console.error('Error:', error);
+                contentContainer.innerHTML = `<p>Error al cargar los usuarios: ${error.message}</p>`;
+            }
+        };
+
+        const mostrarCrearUsuario = () => {
+            contentContainer.innerHTML = `
+                <h2>Creación de un nuevo usuario</h2>
+                <form id="create-user-form">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" required>
+                    <br><br>
+                    <label for="lastName">Apellido:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <br><br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <br><br>
+                    <button type="submit">Guardar</button>
+                    <button type="button" id="cancel-btn">Cancelar</button>
+                </form>
+                <br>
+                <br>
+            `;
+            const cancelBtn = document.getElementById('cancel-btn');
+            cancelBtn.addEventListener('click', () => {
+                contentContainer.innerHTML = `<p>Selecciona una opción del menú</p>`;
+            });
+
+            const form = document.getElementById('create-user-form');
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                
+                const name = document.getElementById('name').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+
+                const userData = {
+                    name,
+                    lastName,
+                    email
+                };
+
+                try {
+                    const response = await fetch('http://localhost:3000/users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    if (response.ok) {
+                        alert('¡Usuario creado con éxito!');
+                        document.getElementById('create-user-form').reset();
+                    } else {
+                        const error = await response.json();
+                        alert(`Error al crear usuario: ${error.message}`);
+                    }
+                } catch (error) {
+                    console.error('Error de red:', error);
+                    alert('Hubo un error de conexión. Inténtalo de nuevo más tarde.');
+                }
+            });
+        };
+
+        listBtn.addEventListener('click', mostrarListaUsuarios);
+        createBtn.addEventListener('click', mostrarCrearUsuario);
+    </script>
 </body>
 </html>
