@@ -1,0 +1,5 @@
+// FUNCION PARA DEVOLVER EL HTML TEMPLATE DEL FORM DE CREACION DE USUARIOS 
+
+export const creationFormTemplate = `
+
+`
