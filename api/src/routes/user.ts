@@ -4,7 +4,7 @@ import {PC_NotImplemented} from "../errors/errors.ts"
 
 const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
-    fastify.get("", {
+    fastify.get("/", {
         schema:{
             tags: ['Usuarios'],
             summary: 'Obtener usuarios',
@@ -19,7 +19,7 @@ const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
     })
 
 
-    fastify.post("",{
+    fastify.post("/",{
         schema:{ 
             tags: ['Usuarios'],
             summary: 'Crea usuario',

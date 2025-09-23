@@ -4,7 +4,7 @@ import { PC_NotImplemented } from "../../errors/errors.ts"
 
 const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
-    fastify.get("", {
+    fastify.get("/", {
         schema:{
             tags: ['Usuarios'],
             summary: 'Obtener usuario',
@@ -21,7 +21,7 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
     })
 
 
-    fastify.put("",{
+    fastify.put("/",{
         schema:{
             tags: ['Usuarios'],
             summary: 'Modificar usuario',
@@ -37,7 +37,7 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
         // reply.code(201).send()
     })
 
-    fastify.delete("",{
+    fastify.delete("/",{
         schema:{
             tags: ['Usuarios'],
             summary: 'Borra usuario',
