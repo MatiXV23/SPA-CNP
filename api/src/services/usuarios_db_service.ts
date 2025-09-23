@@ -1,0 +1,100 @@
+import { BasePgRepository } from "../model/baseRepository.ts";
+import  type { Usuario, Credenciales } from "../model/usuario_model.ts";
+import { PC_NotFound, PC_NotImplemented } from "../errors/errors.ts";
+import { Pool } from "pg";
+
+export class UsuariosDB extends BasePgRepository<Usuario> {
+
+    constructor(pool: Pool) {
+        super(pool)
+    }
+
+    #baseQuery = /*sql*/`
+                SELECT 
+                    u.*
+                FROM usuarios u
+                `
+
+    async getAll(): Promise<Usuario[]> {
+        const users = await this.pool.query<Usuario>(this.#baseQuery+ 'ORDER BY id_usuario;')
+
+        return users.rows
+    }
+    
+    async getById(id:number): Promise<Usuario> {
+        const query = this.#baseQuery + `WHERE u.id_usuario = $1;`
+        const vars = [id]
+        const res = await this.pool.query<Usuario>(query, vars)
+        
+        if (res.rowCount === 0) throw new PC_NotFound(`Usuario con id (${id}) no encontrado`)
+        return res.rows[0]
+    }
+
+    async create(data: Partial<Usuario>): Promise<Usuario> {
+        const generic_foto = "https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg"
+        const {is_admin, username, email, nombres, apellidos, foto_url} = data
+        let query = /*sql*/` 
+                    WITH nuevo_usuario AS (
+                        INSERT INTO usuarios (is_admin, username, email, nombres, apellidos, foto_url)
+                            VALUES ($1, $2, $3, $4, $5, $6)
+                            RETURNING id_usuario
+                        ),
+                        cred AS (
+                            INSERT INTO credenciales (id_usuario, password_hash)
+                            SELECT id_usuario, crypt('pass', gen_salt('bf'))
+                            FROM nuevo_usuario
+                            RETURNING id_usuario
+                        )
+                    SELECT id_usuario from cred;`
+
+        const res = await this.pool.query(query, [is_admin, username, email, nombres, apellidos, foto_url || generic_foto])
+        const user:Usuario = await this.getById(res.rows[0].id_usuario)
+        return user
+    }
+
+    async update(id: number, data: Partial<Usuario>): Promise<Usuario> {
+
+        let query = `UPDATE usuarios
+                        SET 
+                    `
+        let cont = 2;
+        let vars: any[] = [id]
+        
+        for (const key in data){
+            const k = key as keyof Usuario
+            if (data[k]===undefined || k === 'id_usuario') continue
+
+            query += `${k} = $${cont},`
+            vars.push(data[k])
+            cont++
+        }
+        query = query.slice(0, -1)
+
+        query += `  WHERE id_usuario = $1;`
+    
+        await this.pool.query(query, vars)
+        
+        return await this.getById(id)
+    }
+
+    async delete(id: number): Promise<void> {
+        const query =  `DELETE FROM usuarios
+                        WHERE id_usuario = $1;`
+        const res = await this.pool.query<Usuario>(query, [id])
+
+        if (res.rowCount === 0) throw new PC_NotFound(`Usuario de id ${id}, no existe. Ignorando`)
+        console.log(res)
+    }
+    
+    async getUserByCredentials(credenciales: Credenciales): Promise<any> {
+        const query = this.#baseQuery + `JOIN credenciales c ON c.id_usuario = u.id_usuario
+                                        WHERE u.username = $1 AND c.password_hash = crypt($2, password_hash)
+                                        GROUP BY u.id_usuario;`
+        const vars = [credenciales.username, credenciales.password]
+        const res = await this.pool.query<Usuario>(query, vars)
+        
+        if (res.rowCount === 0) throw new PC_NotFound(`Usuario no encontrado. Credenciales Incorrectas`)
+
+        return res.rows[0]
+    }
+}
