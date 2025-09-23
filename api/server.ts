@@ -1,6 +1,7 @@
 import fastifyFormbody from "@fastify/formbody";
 import fastifyStatic from "@fastify/static";
-import { dirname, join } from 'node:path'
+import { dirname, join } from 'node:path';
+import {PC_NotImplemented} from "./errors/errors.ts"
 import cors from "@fastify/cors";
 import fastify from 'fastify';
 
@@ -18,19 +19,19 @@ prefix: "/"
 });
 
 server.get("/usuarios", async(req, rep) => {
-    console.log("not implemented")
+    throw new PC_NotImplemented()
 })
 
 server.post("/usuarios", async(req, rep) => {
-    console.log("not implemented")
+    throw new PC_NotImplemented()
 })
 
 server.put("/usuarios", async(req, rep) => {
-    console.log("not implemented")
+    throw new PC_NotImplemented()
 })
 
 server.delete("/usuarios", async(req, rep) => {
-    console.log("not implemented")
+    throw new PC_NotImplemented()
 })
 
 try{
