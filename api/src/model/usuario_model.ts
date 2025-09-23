@@ -7,8 +7,6 @@ export const usuarioSchema = Type.Object({
     username: Type.String({maximum: 15}),
     email: Type.String(),
     nombres: Type.String({maximum:50}),
-    apellidos: Type.String({maximum:50}),
-    foto_url: Type.Optional(Type.String({maxLength:520}))
 })
 
 export const queryUsuarioSchema = Type.Object({
