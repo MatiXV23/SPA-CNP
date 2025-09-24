@@ -1,6 +1,7 @@
-import { type FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox"
+import { type FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox"
 import { usuarioSchema } from "../../model/usuario_model.ts"
 import { PC_NotImplemented } from "../../errors/errors.ts"
+import { Type } from "@sinclair/typebox"
 
 const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
@@ -15,9 +16,8 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             }
         }
     },async function (request, reply){
-        throw new PC_NotImplemented()
-        // const {id_usuario} = request.params
-        // return fastify.UsersDB.getById(id_usuario)
+        const {id_usuario} = request.params
+        return fastify.UsersDB.getById(id_usuario)
     })
 
 
@@ -30,11 +30,10 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             params : Type.Pick(usuarioSchema, ["id_usuario"]),
             response: 201
         },
-        // preHandler: fastify.verifyParamsId
+        preHandler: fastify.verifyParamsId
     }, async function (request, reply){
-        throw new PC_NotImplemented()
-        // fastify.UsersDB.update(request.params.id_usuario, request.body)
-        // reply.code(201).send()
+        fastify.UsersDB.update(request.params.id_usuario, request.body)
+        reply.code(201).send()
     })
 
     fastify.delete("/",{
@@ -46,9 +45,8 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             response: 201
         }
     }, async function (request, reply){
-        throw new PC_NotImplemented()
-        // const {id_usuario} = request.params
-        // fastify.UsersDB.delete(id_usuario)
+        const {id_usuario} = request.params
+        fastify.UsersDB.delete(id_usuario)
         reply.code(201).send()
     })
 }

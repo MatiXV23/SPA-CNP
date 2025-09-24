@@ -11,9 +11,9 @@ import fp from 'fastify-plugin'
 //   }
 // }
 
-//En vez de exportar la función la encapsulamos con fastify plugin.
+// En vez de exportar la función la encapsulamos con fastify plugin.
 export default fp<FastifySwaggerOptions>(async (fastify) => {
-  await fastify.register(swagger,{
+  await fastify.register(swagger, {
     openapi: {
       openapi: '3.0.0',
       info: {
@@ -28,7 +28,7 @@ export default fp<FastifySwaggerOptions>(async (fastify) => {
         }
       ],
       tags: [
-        { name: 'usuarios', description: 'Usuarios end points.' }
+        { name: 'Usuarios', description: 'Usuarios end points.' }
       ],
       components: {
         securitySchemes: {
