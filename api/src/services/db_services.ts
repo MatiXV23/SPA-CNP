@@ -1,12 +1,15 @@
-import { Pool, type PoolConfig } from "pg";  
+import { Pool , type PoolConfig } from "pg";
 
 const pgConfig: PoolConfig = {
-    connectionTimeoutMillis: 0,
-    idleTimeoutMillis: 1000,
+    user: "MINOMBRECHULO",        
+    password: "LACONTRASEÑASECRETA", 
+    host: "ELPINCHEHOST",
+    port: 5432,
+    database: "LAPROHIBIDA",     
     max: 10,
-    min: 0,
-    allowExitOnIdle: false,
-    maxLifetimeSeconds: 0
-}
+};
 
 export const myPool = new Pool(pgConfig)
+
+// NO SE QUE PASABA QUE CON process.env.PGDATO NO ME CARGABA LA DB
+// TUVE QUE PONER TODOS LOS DATOS DIRECTOS PARA PODER CONECTARME
