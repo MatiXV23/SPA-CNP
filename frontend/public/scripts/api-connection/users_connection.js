@@ -53,12 +53,26 @@ export async function deleteUser(id_usuario){
         return true;
     } catch (err) {
         console.error('Error al eliminar usuario:', err);
-        alert(err.message || 'Hubo un error al eliminar el usuario. Inténtalo de nuevo más tarde.');
         return false;
     }
 }
 
-export async function putUser(){
+export async function putUser(id_usuario, userData) {
+    try {
+        const response = await fetch(`${baseApiUrl}/usuarios/${id_usuario}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al actualizar usuario');
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error al actualizar usuario:', err);
+        throw new Error(err.message || 'Error de conexión con el servidor');
+    }
 }
-

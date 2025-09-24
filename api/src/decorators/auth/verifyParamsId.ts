@@ -4,8 +4,13 @@ import { PC_BadRequest } from "../../errors/errors.ts";
 
 export default fastifyPlugin(async function(fastify){
     fastify.decorate("verifyParamsId", async (req: FastifyRequestType, rep: FastifyReplyType) => {
-        if (req.params.id_usuario !== req.body.id_usuario) throw new PC_BadRequest("Los ids pasados como parametro y en el body no coinciden")
-    })
+            const paramId = req.params.id_usuario;
+            const bodyId = req.body?.id_usuario;
+
+            // Solo valida si el body trae id
+            if (bodyId !== undefined && paramId !== bodyId) {
+                throw new PC_BadRequest("Los ids pasados como parámetro y en el body no coinciden");
+    }})
 })
 
 declare module 'fastify'{

@@ -1,4 +1,5 @@
 import { getUsers, deleteUser } from "../api-connection/users_connection.js";
+import { editUserForm } from "./modificationForm.js";
 
 export async function printUserList() {
 
@@ -33,7 +34,6 @@ export async function printUserList() {
                 
                 const success = await deleteUser(userId);
                 if (success) {
-                    alert('Usuario eliminado con éxito.');
                     printUserList();
                 } else {
                     alert('Error al eliminar usuario. Inténtalo de nuevo.');
@@ -43,9 +43,11 @@ export async function printUserList() {
         const editButtons = document.querySelectorAll('.edit-btn');
 
         editButtons.forEach(button => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', async () => {
                 const userId = button.dataset.id;
-                console.log(`Clic en el botón de editar para el usuario con ID: ${userId}`);
+                const users = await getUsers();
+                const user = users.find(u => u.id_usuario == userId);
+                editUserForm(user); // Abrir form de edición
             });
         });
 

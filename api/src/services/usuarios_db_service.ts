@@ -76,10 +76,20 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
         query = query.slice(0, -1)
 
         query += `  WHERE id_usuario = $1;`
-    
-        await this.pool.query(query, vars)
-        
-        return await this.getById(id)
+        try {
+            const res = await this.pool.query(query, vars)
+
+            if (res.rowCount === 0) {
+                throw new PC_NotFound(`Usuario con id (${id}) no encontrado`);
+            }
+
+            return await this.getById(id);
+        }catch(err: any){
+            if (err.code === "23505") {
+            throw new PC_BadRequest("El username o email ya existe");
+        }
+        throw err;
+        }
     }
 
     async delete(id: number): Promise<void> {

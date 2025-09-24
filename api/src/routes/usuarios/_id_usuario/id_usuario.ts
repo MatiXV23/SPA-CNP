@@ -26,14 +26,21 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             tags: ['Usuarios'],
             summary: 'Modificar usuario',
             description: 'Modifica el usuario con id indicada por parametro.',  
-            body: usuarioSchema,
+            body: Type.Partial(usuarioSchema),
             params : Type.Pick(usuarioSchema, ["id_usuario"]),
-            response: 201
+            response: { 200: usuarioSchema }
         },
         preHandler: fastify.verifyParamsId
     }, async function (request, reply){
-        fastify.UsersDB.update(request.params.id_usuario, request.body)
-        reply.code(201).send()
+         try {
+            console.log("PUT request.body:", request.body)
+            console.log("PUT request.params:", request.params)
+            const updatedUser = await fastify.UsersDB.update(request.params.id_usuario, request.body)
+            reply.code(200).send(updatedUser)
+        } catch (err) {
+            console.error(err)
+            reply.status(500).send({ message: "Error en el servidor" })
+        }
     })
 
     fastify.delete("",{
@@ -45,9 +52,13 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             response: 201
         }
     }, async function (request, reply){
-        const {id_usuario} = request.params
-        fastify.UsersDB.delete(id_usuario)
-        reply.code(201).send()
+        try {
+            await fastify.UsersDB.delete(request.params.id_usuario)
+            reply.code(201).send()
+        } catch (err) {
+            console.error(err)
+            reply.status(500).send({ message: "Error al eliminar usuario" })
+        }
     })
 }
 
