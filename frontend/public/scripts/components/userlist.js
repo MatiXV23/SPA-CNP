@@ -21,7 +21,8 @@ export async function printUserList() {
                 usersHtml += `
                     <li>
                         ${user.nombres} ${user.username} - ${user.email}
-                        <button class="delete-btn" data-id="${user.id_usuario}">Eliminar</button>
+                        <button class="edit-btn" data-id="${user.id_usuario}">Editar</button>
+                        <button class="delete-btn" data-id="${user.id_usuario}">Eliminar</button>                        
                     </li>
                 `;
             });
@@ -42,6 +43,14 @@ export async function printUserList() {
                 } else {
                     alert('Error al eliminar usuario. Inténtalo de nuevo.');
                 }
+            });
+        });
+        const editButtons = document.querySelectorAll('.edit-btn');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const userId = button.dataset.id;
+                console.log(`Clic en el botón de editar para el usuario con ID: ${userId}`);
             });
         });
 
