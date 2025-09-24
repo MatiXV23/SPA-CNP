@@ -1,7 +1,7 @@
 // FUNCION PARA DEVOLVER EL HTML TEMPLATE DEL FORM DE CREACION DE USUARIOS 
 
 export const creationFormTemplate = `
-        <h2>Creación de un nuevo usuario</h2>
+        <h2 id="form-title">Creación de un nuevo usuario</h2>
         <form id="create-user-form">
             <label for="nombres">Nombres:</label>
             <input type="text" id="nombres" name="nombres" required>
@@ -15,7 +15,7 @@ export const creationFormTemplate = `
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
             <br><br>
-            <button type="submit">Guardar</button>
+            <button type="submit" id="submit-btn">Guardar</button>
             <button type="button" id="cancel-btn">Cancelar</button>
         </form>
         <br>

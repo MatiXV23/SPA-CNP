@@ -1,6 +1,6 @@
 import { BasePgRepository } from "../model/baseRepository.ts";
 import  type { Usuario, Credenciales } from "../model/usuario_model.ts";
-import { PC_NotFound, PC_NotImplemented } from "../errors/errors.ts";
+import { PC_NotFound, PC_BadRequest } from "../errors/errors.ts";
 import type { Pool } from "pg";
 
 export class UsuariosDB extends BasePgRepository<Usuario> {
@@ -45,10 +45,16 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
                             RETURNING id_usuario
                         )
                     SELECT id_usuario from cred;`
-
-        const res = await this.pool.query(query, [is_admin, username, email, nombres])
-        const user:Usuario = await this.getById(res.rows[0].id_usuario)
-        return user
+        try{
+            const res = await this.pool.query(query, [is_admin, username, email, nombres])
+            const user:Usuario = await this.getById(res.rows[0].id_usuario)
+            return user
+        }catch(err: any){
+            if (err.code === "23505") {
+            throw new PC_BadRequest("El username ya existe")
+        }
+        throw err
+        }
     }
 
     async update(id: number, data: Partial<Usuario>): Promise<Usuario> {
@@ -70,10 +76,20 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
         query = query.slice(0, -1)
 
         query += `  WHERE id_usuario = $1;`
-    
-        await this.pool.query(query, vars)
-        
-        return await this.getById(id)
+        try {
+            const res = await this.pool.query(query, vars)
+
+            if (res.rowCount === 0) {
+                throw new PC_NotFound(`Usuario con id (${id}) no encontrado`);
+            }
+
+            return await this.getById(id);
+        }catch(err: any){
+            if (err.code === "23505") {
+            throw new PC_BadRequest("El username o email ya existe");
+        }
+        throw err;
+        }
     }
 
     async delete(id: number): Promise<void> {

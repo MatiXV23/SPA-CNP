@@ -25,7 +25,13 @@ export async function createUser(user){
             },
             body: JSON.stringify(user)
         });
-        return response.ok;
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al crear usuario');
+        }
+
+        return await response.json();
     
     } catch (error) {
         console.error('Error de red:', error);
@@ -36,23 +42,37 @@ export async function createUser(user){
 export async function deleteUser(id_usuario){
     try {
         const response = await fetch(baseApiUrl+`/usuarios/${id_usuario}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: 'DELETE'
         });
-           if (!response.ok) {
-            throw new Error('Error al eliminar usuario.');
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al eliminar usuario.');
         }
 
-        return response.ok;
-    }catch(err){
-        console.error('Error al eliminar usuario', err);
-        alert('Hubo un error al eliminar el usuario. Inténtalo de nuevo más tarde.');
+        return true;
+    } catch (err) {
+        console.error('Error al eliminar usuario:', err);
+        return false;
     }
 }
 
-export async function putUser(){
+export async function putUser(id_usuario, userData) {
+    try {
+        const response = await fetch(`${baseApiUrl}/usuarios/${id_usuario}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Error al actualizar usuario');
+        }
+
+        return await response.json();
+    } catch (err) {
+        console.error('Error al actualizar usuario:', err);
+        throw new Error(err.message || 'Error de conexión con el servidor');
+    }
 }
-
