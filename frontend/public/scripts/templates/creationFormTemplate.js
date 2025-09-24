@@ -7,7 +7,7 @@ export const creationFormTemplate = `
             <input type="text" id="nombres" name="nombres" required>
             <br><br>
             <label for="is_admin">Administrador:</label>
-            <input type="checkbox" id="is_admin" required>
+            <input type="checkbox" id="is_admin">
             <br><br>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>

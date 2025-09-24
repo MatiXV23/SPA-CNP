@@ -21,7 +21,7 @@ export async function createUsersForm(){
 
 async function postUser() {
     const nombres = document.getElementById('nombres').value;
-    const  is_admin= document.getElementById('is_admin').checked;
+    const is_admin= document.getElementById('is_admin').checked;
     const username = document.getElementById('username').value;
     const email = document.getElementById('email').value;
 
@@ -31,6 +31,7 @@ async function postUser() {
         username: username,
         email: email
     };
+    
     const creado = await createUser(userData);
     
     if (creado) {

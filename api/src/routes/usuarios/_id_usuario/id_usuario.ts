@@ -1,6 +1,6 @@
 import { type FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox"
-import { usuarioSchema } from "../../model/usuario_model.ts"
-import { PC_NotImplemented } from "../../errors/errors.ts"
+import { usuarioSchema } from "../../../model/usuario_model.ts"
+import { PC_NotImplemented } from "../../../errors/errors.ts"
 import { Type } from "@sinclair/typebox"
 
 const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {

@@ -1,12 +1,14 @@
-export async function getUsers(){
+const baseApiUrl = `http://localhost:3000`
+export async function getUsers(usuarios){
     try{
-        const response = await fetch('http://localhost:3000/usuarios');
+        const response = await fetch(baseApiUrl+'/usuarios');
         
         if (!response.ok) {
             throw new Error('Error al obtener la lista de usuarios');
         }
 
         const users = await response.json();
+        return users
     }catch(err){
         console.error(err);        
     }
@@ -16,12 +18,12 @@ export async function getUsers(){
 export async function createUser(user){
     console.log(user)
     try {
-        const response = await fetch('http://localhost:3000/users', {
+        const response = await fetch(baseApiUrl+'/usuarios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(user)
         });
         return response.ok;
     
@@ -33,7 +35,7 @@ export async function createUser(user){
 
 export async function deleteUser(id_usuario){
     try {
-        const response = await fetch(`http://localhost:3000/users/${id_usuario}`, {
+        const response = await fetch(baseApiUrl+`/usuarios/${id_usuario}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

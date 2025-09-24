@@ -14,11 +14,11 @@ server.register(fastifyStatic, {
 });
 
 const port = Number(process.env.FRONT_PORT)  || 4000;
+const host = '::';
 
-  try {
-    await server.listen({ port: port });
-  } catch (err) {
+try{
+    await server.listen({ port, host });
+} catch(err) {
     server.log.error(err);
     process.exit(1);
-  }
-
+}

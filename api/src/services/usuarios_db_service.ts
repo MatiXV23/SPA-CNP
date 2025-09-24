@@ -35,7 +35,7 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
         let query = /*sql*/` 
                     WITH nuevo_usuario AS (
                         INSERT INTO usuarios (is_admin, username, email, nombres)
-                            VALUES ($1, $2, $3, $4, $5, $6)
+                            VALUES ($1, $2, $3, $4)
                             RETURNING id_usuario
                         ),
                         cred AS (

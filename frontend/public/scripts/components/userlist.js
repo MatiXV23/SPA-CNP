@@ -3,12 +3,7 @@ import { getUsers, deleteUser } from "../api-connection/users_connection.js";
 export async function printUserList() {
 
     const contentContainer = document.getElementById('content-container');
-    const users = [
-        {is_admin: true, nombres: "Luis", username: "Lucho", email: "lucho@gmail.com", id_usuario: 1},
-        {is_admin: true, nombres: "Ana", username: "Anita", email: "ana@gmail.com", id_usuario: 2},
-        {is_admin: true, nombres: "Carlos", username: "Carlitos", email: "carlos@gmail.com", id_usuario: 3},
-        {is_admin: true, nombres: "Maria", username: "Mari", email: "maria@gmail.com", id_usuario: 4}
-    ];
+    const users = await getUsers()
 
     try {
         let usersHtml = `<h2>Listado de Usuarios</h2>`;
