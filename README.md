@@ -13,9 +13,12 @@ ___
 ## ✅ OBJETIVO ✅
 ![crud](https://miro.medium.com/v2/resize:fit:1400/1*2eBdh0vLZjUyCDF6x1EqvQ.png)
 
-En general el objetivo es crear un menu que siempre muestre los botones *listar usuarios* (GET) *crear usuario* (POST)
+En general el objetivo es crear una pagina web con un menu que siempre muestre.
+Los botones *listar usuarios* (GET) *crear usuario* (POST).
+
 Cuando el publico objetivo interactua con dichos botones, la pagina renderizara lo que selecciono.
 Por ejemplo una lista de los usuarios creados o un formulario de creación de un nuevo usuario.
+
 Al listar los usuarios a su lado deberan tener dos botones, uno para *modificar* los datos (PUT) y otro para *eliminar* (DELETE)
 ___
 ### 🙋 Integrantes 🙋
