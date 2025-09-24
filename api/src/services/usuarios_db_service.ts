@@ -1,6 +1,6 @@
 import { BasePgRepository } from "../model/baseRepository.ts";
 import  type { Usuario, Credenciales } from "../model/usuario_model.ts";
-import { PC_NotFound, PC_NotImplemented } from "../errors/errors.ts";
+import { PC_NotFound, PC_BadRequest } from "../errors/errors.ts";
 import type { Pool } from "pg";
 
 export class UsuariosDB extends BasePgRepository<Usuario> {
@@ -45,10 +45,16 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
                             RETURNING id_usuario
                         )
                     SELECT id_usuario from cred;`
-
-        const res = await this.pool.query(query, [is_admin, username, email, nombres])
-        const user:Usuario = await this.getById(res.rows[0].id_usuario)
-        return user
+        try{
+            const res = await this.pool.query(query, [is_admin, username, email, nombres])
+            const user:Usuario = await this.getById(res.rows[0].id_usuario)
+            return user
+        }catch(err: any){
+            if (err.code === "23505") {
+            throw new PC_BadRequest("El username ya existe")
+        }
+        throw err
+        }
     }
 
     async update(id: number, data: Partial<Usuario>): Promise<Usuario> {

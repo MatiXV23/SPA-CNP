@@ -4,7 +4,7 @@ import { Type } from "@sinclair/typebox"
 
 const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
-    fastify.get("/", {
+    fastify.get("", {
         schema:{
             tags: ['Usuarios'],
             summary: 'Obtener usuarios',
@@ -18,7 +18,7 @@ const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
     })
 
 
-    fastify.post("/",{
+    fastify.post("",{
         schema:{ 
             tags: ['Usuarios'],
             summary: 'Crea usuario',
@@ -26,8 +26,15 @@ const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             body: Type.Omit(usuarioSchema, ["id_usuario"])
         }
     }, async function (request, reply){
-        fastify.UsersDB.create(request.body)
-        reply.code(201).send()
+        try {
+            const user = await fastify.UsersDB.create(request.body)
+            return reply.status(201).send(user);
+        } catch(err: any){
+            if (err.message.includes("ya existe")) {
+            return reply.status(409).send({ message: err.message }) // Conflict
+        }
+        return reply.status(500).send({ message: "Error interno del servidor" })
+        }
     })
 }   
 
