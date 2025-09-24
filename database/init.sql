@@ -11,9 +11,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     is_admin BOOLEAN NOT NULL,
     username VARCHAR(15) NOT NULL UNIQUE,
     email CITEXT  NOT NULL UNIQUE,
-    nombres VARCHAR(50) NOT NULL,
-    apellidos VARCHAR(50) NOT NULL,
-    foto_url VARCHAR(520)
+    nombres VARCHAR(50) NOT NULL
 );
 
 -- Tabla con solo el hash
@@ -25,11 +23,11 @@ CREATE TABLE IF NOT EXISTS credenciales (
 
 -- Dar de alta 1 admin y 2 usuarios normales.
 WITH nuevos_usuarios AS (
-  INSERT INTO usuarios (is_admin, username, email, nombres, apellidos, foto_url)
+  INSERT INTO usuarios (is_admin, username, email, nombres)
     VALUES 
-    (TRUE,'admin', 'admin@example.com','Admin', 'Principal', 'https://static.vecteezy.com/system/resources/thumbnails/065/754/689/small/cyberpunk-gamer-avatar-futuristic-goggles-and-stylish-mask-on-transparent-background-png.png'),
-    (FALSE, 'user', 'user1@example.com', 'Usuario', 'Uno', 'https://static.vecteezy.com/system/resources/thumbnails/028/202/396/small/old-man-teacher-face-3d-profession-avatars-free-png.png'),
-    (FALSE, 'user2', 'user2@example.com', 'Usuario', 'Dos', 'https://static.vecteezy.com/system/resources/thumbnails/026/797/659/small/astronaut-3d-profession-avatars-illustrations-png.png')
+    (TRUE,'admin', 'admin@example.com','Admin'),
+    (FALSE, 'user', 'user1@example.com', 'Usuario'),
+    (FALSE, 'user2', 'user2@example.com', 'Usuario')
   RETURNING id_usuario
 )
 INSERT INTO credenciales (id_usuario, password_hash)
