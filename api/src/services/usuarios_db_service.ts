@@ -1,7 +1,7 @@
 import { BasePgRepository } from "../model/baseRepository.ts";
 import  type { Usuario, Credenciales } from "../model/usuario_model.ts";
 import { PC_NotFound, PC_NotImplemented } from "../errors/errors.ts";
-import { Pool } from "pg";
+import type { Pool } from "pg";
 
 export class UsuariosDB extends BasePgRepository<Usuario> {
 
@@ -31,11 +31,10 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
     }
 
     async create(data: Partial<Usuario>): Promise<Usuario> {
-        const generic_foto = "https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg"
-        const {is_admin, username, email, nombres, apellidos, foto_url} = data
+        const {is_admin, username, email, nombres} = data
         let query = /*sql*/` 
                     WITH nuevo_usuario AS (
-                        INSERT INTO usuarios (is_admin, username, email, nombres, apellidos, foto_url)
+                        INSERT INTO usuarios (is_admin, username, email, nombres)
                             VALUES ($1, $2, $3, $4, $5, $6)
                             RETURNING id_usuario
                         ),
@@ -47,7 +46,7 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
                         )
                     SELECT id_usuario from cred;`
 
-        const res = await this.pool.query(query, [is_admin, username, email, nombres, apellidos, foto_url || generic_foto])
+        const res = await this.pool.query(query, [is_admin, username, email, nombres])
         const user:Usuario = await this.getById(res.rows[0].id_usuario)
         return user
     }

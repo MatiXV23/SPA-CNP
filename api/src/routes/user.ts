@@ -1,6 +1,6 @@
-import {type FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox"
+import {type FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox"
 import { usuarioSchema } from "../model/usuario_model.ts"
-import {PC_NotImplemented} from "../errors/errors.ts"
+import { Type } from "@sinclair/typebox"
 
 const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
@@ -14,8 +14,7 @@ const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             }
         }
     },async function (request, reply){
-        throw new PC_NotImplemented()
-        // return fastify.UsersDB.getAll()
+        return fastify.UsersDB.getAll()
     })
 
 
@@ -27,8 +26,7 @@ const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             body: Type.Omit(usuarioSchema, ["id_usuario"])
         }
     }, async function (request, reply){
-        throw new PC_NotImplemented()
-        // fastify.UsersDB.create(request.body)
+        fastify.UsersDB.create(request.body)
         reply.code(201).send()
     })
 }   

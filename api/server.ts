@@ -10,13 +10,19 @@ const ruta = join(dirname(archivo), 'src')
 
 const server = fastify({logger:true}).withTypeProvider<TypeBoxTypeProvider>();
 
+const front_port = Number(process.env.API_PORT) || 4000;
 await server.register(cors, {
-    origin: "http://localhost:4000",
+    origin: `http://localhost:${front_port}`,
     methods: ["GET", "POST", "PUT", "DELETE"]
 });
 
+
 await server.register(autoLoad, {
     dir: join(ruta, 'plugins')
+})
+
+await server.register(autoLoad, {
+    dir: join(ruta, 'decorators')
 })
 
 server.register(autoLoad, {
@@ -24,7 +30,7 @@ server.register(autoLoad, {
     routeParams: true
 })
 
-const port = Number(process.env.API_PORT) || 4000;
+const port = Number(process.env.API_PORT) || 3000;
 const host = '::';
 
 try{
