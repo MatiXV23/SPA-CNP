@@ -1,5 +1,6 @@
 import { creationFormTemplate } from "../templates/creationFormTemplate.js";
 import { createUser } from "../api-connection/users_connection.js";
+import { printUserList } from "./userlist.js";
 
 
 export async function createUsersForm(){
@@ -8,7 +9,7 @@ export async function createUsersForm(){
     
     const cancelBtn = document.getElementById('cancel-btn');
     cancelBtn.addEventListener('click', () => {
-        contentContainer.innerHTML = `<p>Selecciona una opción del menú</p>`;
+        contentContainer.innerHTML = printUserList();
     });
 
     const form = document.getElementById('create-user-form');
