@@ -18,6 +18,9 @@ await server.register(cors, {
 await server.register(autoLoad, {
     dir: join(ruta, 'plugins')
 })
+await server.register(autoLoad, {
+    dir: join(ruta, 'decorators')
+})
 
 server.register(autoLoad, {
     dir: join(ruta, 'routes'),

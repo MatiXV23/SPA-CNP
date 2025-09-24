@@ -1,7 +1,7 @@
 import { Type } from '@sinclair/typebox'
 import type { Static } from '@sinclair/typebox'
 
-export const usuarioSchema = Type.Object({
+export const    usuarioSchema = Type.Object({
     id_usuario: Type.Integer({minimum: 1}),
     is_admin: Type.Boolean(),
     username: Type.String({maximum: 15}),
