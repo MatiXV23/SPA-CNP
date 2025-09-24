@@ -13,14 +13,12 @@ server.register(fastifyStatic, {
     prefix: '/'
 });
 
-server.get('/', async (request, reply) => {
-    return reply.sendFile('index.html');
-});
+const port = Number(process.env.FRONT_PORT)  || 4000;
 
-server.listen({ port: 4000, host: 'localhost' }, (err, address) => {
-    if (err) {
-        server.log.error(err);
-        process.exit(1);
-    }
-    console.log(`Frontend corriendo en ${address}`);
-});
+  try {
+    await server.listen({ port: port });
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+
