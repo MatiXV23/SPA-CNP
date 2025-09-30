@@ -1,5 +1,4 @@
 export async function get(url){
-    console.log(url)
     const response = await fetch(url);
     
     if (!response.ok) {

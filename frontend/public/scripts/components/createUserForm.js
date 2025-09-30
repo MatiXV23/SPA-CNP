@@ -9,7 +9,7 @@ export async function createUsersForm(){
     
     const cancelBtn = document.getElementById('cancel-btn');
     cancelBtn.addEventListener('click', () => {
-        contentContainer.innerHTML = printUserList();
+        printUserList();
     });
 
     const form = document.getElementById('create-user-form');
@@ -33,21 +33,6 @@ async function postUser() {
         email: email
     };
     
-    try {
-    const creado = await createUser(userData);
-    alert('¡Usuario creado con éxito!');
-    document.getElementById('create-user-form').reset();
-    } catch (err) {
-        alert(`Error al crear usuario: ${err.message}`);
-            const error = await response.json();
-    }
-
-    
-    // if (creado) {
-    //         alert('¡Usuario creado con éxito!');
-    //         document.getElementById('create-user-form').reset();
-    // } else {
-    //     const error = await response.json();
-    //     alert(`Error al crear usuario: ${error.message}`);
-    // }
+    await createUser(userData);
+    await printUserList();
 }
