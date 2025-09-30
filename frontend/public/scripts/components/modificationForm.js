@@ -1,5 +1,5 @@
 import { creationFormTemplate } from "../templates/creationFormTemplate.js";
-import { putUser, createUser } from "../api-connection/users_connection.js";
+import { putUser, createUser } from "../services/users-service.js";
 import { printUserList } from "./userlist.js";
 
 export function editUserForm(user) {
@@ -32,16 +32,7 @@ export async function submitUserForm(id_usuario = null) {
 
     const userData = { nombres, username, email, is_admin };
 
-    try {
-        if (id_usuario) {
-            await putUser(id_usuario, userData);
-            alert('¡Usuario actualizado con éxito!');
-        } else {
-            await createUser(userData);
-            alert('¡Usuario creado con éxito!');
-        }
-        document.getElementById('create-user-form').reset();
-    } catch (err) {
-        alert(`Error: ${err.message}`);
-    }
+    await putUser(id_usuario, userData);
+    
+    document.getElementById('create-user-form').reset();
 }
