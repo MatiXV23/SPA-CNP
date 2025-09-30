@@ -1,9 +1,9 @@
-import { get, post, put, del } from "../services/api-service";
+import { get, post, put, del } from "./api-service.js";
 
 const baseApiUrl = `http://localhost:3000`
 
 export async function getUsers(){
-    await get(baseApiUrl + '/usuarios')
+    return await get(baseApiUrl + '/usuarios')
 } 
 
 export async function createUser(user){

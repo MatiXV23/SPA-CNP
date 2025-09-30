@@ -1,4 +1,4 @@
-import { getUsers, deleteUser } from "../api-connection/users_connection.js";
+import { getUsers, deleteUser } from "../services/users-service.js";
 import { editUserForm } from "./modificationForm.js";
 
 export async function printUserList() {

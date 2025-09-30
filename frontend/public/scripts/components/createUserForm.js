@@ -1,5 +1,5 @@
 import { creationFormTemplate } from "../templates/creationFormTemplate.js";
-import { createUser } from "../api-connection/users_connection.js";
+import { createUser } from "../services/users-service.js";
 import { printUserList } from "./userlist.js";
 
 

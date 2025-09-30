@@ -1,5 +1,5 @@
 import { creationFormTemplate } from "../templates/creationFormTemplate.js";
-import { putUser, createUser } from "../api-connection/users_connection.js";
+import { putUser, createUser } from "../services/users-service.js";
 import { printUserList } from "./userlist.js";
 
 export function editUserForm(user) {
