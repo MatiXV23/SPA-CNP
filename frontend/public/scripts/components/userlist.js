@@ -16,12 +16,12 @@ export async function printUserList() {
             users.forEach(user => {
                 usersHtml += `
                     <li class="flex justify-left w-full text-center gap-x-6 py-5">
-                        <div class="w-full text-left flex flex-col">
+                        <div class="ml-7 w-full text-left flex flex-col">
                             <h2 class="text-xl">${user.nombres}</h2>
                             <p class="text-md text-gray-400">${user.username} - ${user.email}</p>
                         </div>
-                        <button class="edit-btn cursor-pointer w-1/6 ml-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white bg-yellow-600 hover:bg-white/5" data-id="${user.id_usuario}">Editar</button>
-                        <button class="delete-btn cursor-pointer w-1/6 ml-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white bg-red-600 hover:bg-white/5" data-id="${user.id_usuario}">Eliminar</button>                        
+                        <button class="edit-btn cursor-pointer w-1/5 ml-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white bg-yellow-600 hover:bg-white/5" data-id="${user.id_usuario}">Editar</button>
+                        <button class="delete-btn cursor-pointer w-1/5 ml-3 mr-7 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white bg-red-600 hover:bg-white/5" data-id="${user.id_usuario}">Eliminar</button>                        
                     </li>
                 `;
             });
