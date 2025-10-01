@@ -7,25 +7,24 @@ import cors from "@fastify/cors";
 import { PC_Error, PC_InternalServerError } from "./src/errors/errors.ts";
 import jwtPlugin from './src/plugins/jwt.ts';
 import swaggerPlugin from './src/plugins/swagger.ts';
-import loginRoutes from './src/routes/login.ts';
 
 const archivo = fileURLToPath(import.meta.url)
 const ruta = join(dirname(archivo), 'src')
 
 const server = fastify({logger:true}).withTypeProvider<TypeBoxTypeProvider>();
 
-const front_port = process.env.API_PORT || 4000;
+const front_port = Number(process.env.API_PORT) || 4000;
+const origin = `http://localhost:${front_port}`
 await server.register(cors, {
-    origin: `http://localhost:4000`,
+    origin: origin,
     methods: ["GET", "POST", "PUT", "DELETE"]
 });
 
-await server.register(jwtPlugin);
 
-// await server.register(autoLoad, {
-//     dir: join(ruta, 'plugins')
-// })
-server.register(swaggerPlugin);
+await server.register(autoLoad, {
+    dir: join(ruta, 'plugins')
+})
+
 
 await server.register(autoLoad, {
     dir: join(ruta, 'decorators')

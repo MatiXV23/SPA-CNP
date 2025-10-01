@@ -1,5 +1,4 @@
-import { Type } from '@sinclair/typebox'
-import type { Static } from '@sinclair/typebox'
+import { Type, type Static } from "@fastify/type-provider-typebox"
 
 export const usuarioSchema = Type.Object({
     id_usuario: Type.Integer({minimum: 1}),
@@ -11,7 +10,7 @@ export const usuarioSchema = Type.Object({
 
 export const credencialesSchema = Type.Object({
     username : Type.String({maxLength: 15, default: 'admin'}),
-    password : Type.String({minLength: 2, default: 'contraseña'})
+    password : Type.String({minLength: 2, default: 'pass'})
 })
 
 

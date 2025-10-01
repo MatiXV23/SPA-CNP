@@ -1,12 +1,10 @@
-import { type FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox"
+import { type FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox"
 import { usuarioSchema } from "../../../model/usuario_model.ts"
-import { PC_NotImplemented } from "../../../errors/errors.ts"
-import { Type } from "@sinclair/typebox"
 
 const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
     fastify.get("", {
-        onRequest: [fastify.authenticate],
+        onRequest: fastify.authenticate,
         schema:{
             tags: ['Usuarios'],
             summary: 'Obtener usuario',
@@ -14,7 +12,10 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
             params : Type.Pick(usuarioSchema, ["id_usuario"]),
             response: {
                 200: usuarioSchema
-            }
+            },
+            security: [
+                { bearerAuth: [] }
+            ]
         }
     },async function (request, reply){
         const {id_usuario} = request.params
@@ -23,45 +24,40 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
 
     fastify.put("",{
-        onRequest: [fastify.authenticate, fastify.authorizeAdmin],
+        onRequest: fastify.authenticate,
         schema:{
             tags: ['Usuarios'],
             summary: 'Modificar usuario',
             description: 'Modifica el usuario con id indicada por parametro.',  
-            body: Type.Partial(usuarioSchema),
+            body: usuarioSchema,
             params : Type.Pick(usuarioSchema, ["id_usuario"]),
-            response: { 200: usuarioSchema }
+            response: 204,
+            security: [
+                { bearerAuth: [] }
+            ]
         },
-        preHandler: fastify.verifyParamsId
+        preHandler: [fastify.authorizeAdmin ,fastify.verifyParamsId]
     }, async function (request, reply){
-         try {
-            console.log("PUT request.body:", request.body)
-            console.log("PUT request.params:", request.params)
-            const updatedUser = await fastify.UsersDB.update(request.params.id_usuario, request.body)
-            reply.code(200).send(updatedUser)
-        } catch (err) {
-            console.error(err)
-            reply.status(500).send({ message: "Error en el servidor" })
-        }
+            await fastify.UsersDB.update(request.params.id_usuario, request.body)
+            reply.code(204).send()
     })
 
     fastify.delete("",{
-        onRequest: [fastify.authenticate, fastify.authorizeAdmin],
+        onRequest: fastify.authenticate,
         schema:{
             tags: ['Usuarios'],
             summary: 'Borra usuario',
             description: 'Elimina el usuario con id indicada por parametro.',  
             params : Type.Pick(usuarioSchema, ["id_usuario"]),
-            response: 201
-        }
+            response: 204,
+            security: [
+                { bearerAuth: [] }
+            ]
+        },
+        preHandler: fastify.authorizeAdmin,
     }, async function (request, reply){
-        try {
-            await fastify.UsersDB.delete(request.params.id_usuario)
-            reply.code(201).send()
-        } catch (err) {
-            console.error(err)
-            reply.status(500).send({ message: "Error al eliminar usuario" })
-        }
+        await fastify.UsersDB.delete(request.params.id_usuario)
+        reply.code(204).send()
     })
 }
 

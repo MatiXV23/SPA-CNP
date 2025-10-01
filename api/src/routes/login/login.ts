@@ -1,11 +1,9 @@
-import { credencialesSchema } from "../model/usuario_model.ts";
+import { credencialesSchema } from "../../model/usuario_model.ts";
 import { type FastifyPluginAsyncTypebox, Type } from "@fastify/type-provider-typebox";
-import { PC_NotFound, PC_NoAuthorized } from '../errors/errors.ts';
-import type { FastifyReply, FastifyRequest } from "fastify";
 
 
 const authRoute: FastifyPluginAsyncTypebox = async(server) =>{
-    server.post('/login', {
+    server.post('', {
         schema: {
             tags: ['Auth'],
             body: credencialesSchema,
