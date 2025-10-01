@@ -4,6 +4,7 @@ import { printUserList } from "./userlist.js";
 
 
 export async function createUsersForm(){
+    
     const contentContainer = document.getElementById('content-container');    
     contentContainer.innerHTML = creationFormTemplate ;
     

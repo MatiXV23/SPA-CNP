@@ -5,7 +5,6 @@ export function getNavTemplate(){
         <div class="flex justify-around w-md items-center">
             <button id="nav-list-btn" class="cursor-pointer  block rounded-lg p-2 text-lg font-bold text-blue-300 hover:bg-gray-700 hover:underline">Listar usuarios</button>
             <button id="nav-create-btn" class="cursor-pointer -mx-3 block rounded-lg p-2 text-lg font-bold text-blue-300 hover:bg-gray-700 hover:underline">Crear usuario</button>
-            <button id="nav-login-btn" class="cursor-pointer -mx-3 block rounded-lg p-2 text-lg font-bold text-blue-300 hover:bg-gray-700 hover:underline">Login</button>
             <button id="nav-logout-btn" class="cursor-pointer -mx-3 block rounded-lg p-2 text-lg font-bold text-blue-300 hover:bg-gray-700 hover:underline">LogOut</button>
         </div>
     </nav>

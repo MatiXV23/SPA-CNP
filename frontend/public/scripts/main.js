@@ -13,27 +13,18 @@ function cargarNav() {
 
     const listBtn = document.getElementById('nav-list-btn');
     const createBtn = document.getElementById('nav-create-btn');
-    const linBtn = document.getElementById('nav-login-btn');
     const loutBtn = document.getElementById('nav-logout-btn');
     
-    listBtn.addEventListener('click', printUserList);
-    createBtn.addEventListener('click', createUsersForm);
-
     if (!localStorage.getItem("AuthToken")) {
-        if(linBtn) {
-            linBtn.style.display = 'block';
-            linBtn.addEventListener('click', () => {
-                printLoginForm();
+        printLoginForm();
                 
-                const setTokenLogin = document.getElementById("login-btn");
-                
-                if(setTokenLogin){
-                    setTokenLogin.addEventListener('click', async(e) => {
-                        e.preventDefault();
-                        await haciendoLogin();
-                        cargarNav();
-                    });
-                }
+        const setTokenLogin = document.getElementById("login-btn");
+        
+        if(setTokenLogin){
+            setTokenLogin.addEventListener('click', async(e) => {
+                e.preventDefault();
+                await haciendoLogin();
+                cargarNav();
             });
         }
         if(loutBtn){
@@ -41,6 +32,9 @@ function cargarNav() {
         }
     }
     else {
+        listBtn.addEventListener('click', printUserList);
+        createBtn.addEventListener('click', createUsersForm);
+
         if(loutBtn){
             loutBtn.style.display = 'block';
             loutBtn.addEventListener('click', () =>{

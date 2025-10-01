@@ -31,5 +31,6 @@ export function printLoginForm() {
         </div>
 
     `
-    return contentContainer.innerHTML = formularioLogin
+    contentContainer.innerHTML = formularioLogin
+    return
 }
