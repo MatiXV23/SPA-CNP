@@ -2,12 +2,30 @@ import { get, post, put, del } from "./api-service.js";
 
 const baseApiUrl = `http://localhost:3000`
 
-let token = ""
 export function isLogged() {
-    if (token) return true
+    return !!localStorage.getItem("AuthToken");
+}
 
-    token = localStorage.getItem("AuthToken")
-    return !!token
+export async function haciendoLogin(){
+    const contentContainer = document.getElementById('content-container');  
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    const data = await postForLogin(baseApiUrl + '/login', { username, password});
+    localStorage.setItem("AuthToken", data.token);
+
+    return contentContainer.innerHTML = `
+        <h1>Bienvenido compañero, que gusto verlo nuevamente!</h1>
+    `
+}
+
+export function imDone(){
+    localStorage.clear()
+    const contentContainer = document.getElementById('content-container');  
+    console.log("Adios!")
+    return contentContainer.innerHTML = `
+        <h1>Sesión cerrada con exito</h1>
+    `
 }
 
 export async function getUsers(){
