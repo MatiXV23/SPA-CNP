@@ -1,4 +1,4 @@
-export function getLoginFormTemplate() {
+export function printLoginForm() {
     const contentContainer = document.getElementById('content-container');   
     const formularioLogin = `
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

@@ -1,5 +1,5 @@
 
-export function printNav(){
+export function getNavTemplate(){
     return `
     <nav class="w-full mb-6  py-3 flex items-center justify-center bg-gray-800">
         <div class="flex justify-around w-md items-center">

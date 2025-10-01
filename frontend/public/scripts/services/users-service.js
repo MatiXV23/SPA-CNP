@@ -1,4 +1,6 @@
-import { get, post, put, del } from "./api-service.js";
+import { get, postForLogin, post, put, del } from "./api-service.js";
+import { bienvenidaFormTemplate } from "../templates/bienvenidaTemplate.js";
+import { despedidaFormTemplate } from "../templates/despedidaTemplate.js";
 
 const baseApiUrl = `http://localhost:3000`
 
@@ -14,18 +16,14 @@ export async function haciendoLogin(){
     const data = await postForLogin(baseApiUrl + '/login', { username, password});
     localStorage.setItem("AuthToken", data.token);
 
-    return contentContainer.innerHTML = `
-        <h1>Bienvenido compañero, que gusto verlo nuevamente!</h1>
-    `
+    return contentContainer.innerHTML = bienvenidaFormTemplate;
 }
 
 export function imDone(){
     localStorage.clear()
     const contentContainer = document.getElementById('content-container');  
     console.log("Adios!")
-    return contentContainer.innerHTML = `
-        <h1>Sesión cerrada con exito</h1>
-    `
+    return contentContainer.innerHTML = despedidaFormTemplate;
 }
 
 export async function getUsers(){

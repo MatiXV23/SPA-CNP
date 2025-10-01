@@ -3,37 +3,55 @@
 import { printUserList } from "./components/userlist.js";
 import { createUsersForm } from "./components/createUserForm.js";
 import { haciendoLogin, imDone, isLogged } from "./services/users-service.js";
-import { printNav } from "./components/navBar.js";
-import { getLoginFormTemplate } from "./templates/loginFormTemplate.js";
+import { getNavTemplate } from "./templates/navBarTemplate.js";
+import { printLoginForm } from "./components/loginForm.js";
 
 const navCompletable = document.getElementById('barraNavegacion');
 
-navCompletable.innerHTML = printNav()
+function cargarNav() { 
+    navCompletable.innerHTML = getNavTemplate()
 
-const listBtn = document.getElementById('nav-list-btn');
-const createBtn = document.getElementById('nav-create-btn');
-const linBtn = document.getElementById('nav-login-btn');
-
-
-listBtn.addEventListener('click', printUserList);
-createBtn.addEventListener('click', createUsersForm);
-
-
-
-if (!localStorage.getItem("AuthToken")) {
-    linBtn.addEventListener('click', () => {
-        getLoginFormTemplate();
-        
-        const setTokenLogin = document.getElementById("login-btn");
-        
-        setTokenLogin.addEventListener('click', async(e) => {
-            e.preventDefault();
-            await haciendoLogin();
-        });
-    });
-    
-}
-else {
+    const listBtn = document.getElementById('nav-list-btn');
+    const createBtn = document.getElementById('nav-create-btn');
+    const linBtn = document.getElementById('nav-login-btn');
     const loutBtn = document.getElementById('nav-logout-btn');
-    loutBtn.addEventListener('click', imDone);
+    
+    listBtn.addEventListener('click', printUserList);
+    createBtn.addEventListener('click', createUsersForm);
+
+    if (!localStorage.getItem("AuthToken")) {
+        if(linBtn) {
+            linBtn.style.display = 'block';
+            linBtn.addEventListener('click', () => {
+                printLoginForm();
+                
+                const setTokenLogin = document.getElementById("login-btn");
+                
+                if(setTokenLogin){
+                    setTokenLogin.addEventListener('click', async(e) => {
+                        e.preventDefault();
+                        await haciendoLogin();
+                        cargarNav();
+                    });
+                }
+            });
+        }
+        if(loutBtn){
+            loutBtn.style.display = 'none';
+        }
+    }
+    else {
+        if(loutBtn){
+            loutBtn.style.display = 'block';
+            loutBtn.addEventListener('click', () =>{
+                imDone();
+                cargarNav();
+            });
+        }
+        if(linBtn){
+            linBtn.style.display = 'none';
+        }
+    }
 }
+
+cargarNav();
