@@ -1,5 +1,6 @@
-export function getLoginFormTemplate() {
-    return `
+export function printLoginForm() {
+    const contentContainer = document.getElementById('content-container');   
+    const formularioLogin = `
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div class="m-auto sm:w-full sm:max-w-sm">
                 <img src="https://www.ucu.edu.uy/plantillas/images/logo_ucu.svg" class="mx-auto h-14 w-auto" />
@@ -30,4 +31,5 @@ export function getLoginFormTemplate() {
         </div>
 
     `
+    return contentContainer.innerHTML = formularioLogin
 }

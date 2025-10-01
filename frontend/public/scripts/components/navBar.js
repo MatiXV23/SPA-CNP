@@ -1,5 +1,0 @@
-// SCRIPT PARA EL NAVEGADOR ENTRE COMPONENTES (LOS BOTONES QUE MANDAN A LA LISTA etc)
-
-export function printNav(){
-    
-}

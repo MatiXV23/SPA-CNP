@@ -2,19 +2,56 @@
 
 import { printUserList } from "./components/userlist.js";
 import { createUsersForm } from "./components/createUserForm.js";
-import { isLogged } from "./services/users-service.js";
+import { haciendoLogin, imDone, isLogged } from "./services/users-service.js";
+import { getNavTemplate } from "./templates/navBarTemplate.js";
+import { printLoginForm } from "./components/loginForm.js";
 
+const navCompletable = document.getElementById('barraNavegacion');
 
-const listBtn = document.getElementById('list-btn');
-const createBtn = document.getElementById('create-btn');
+function cargarNav() { 
+    navCompletable.innerHTML = getNavTemplate()
 
-listBtn.addEventListener('click', printUserList);
-createBtn.addEventListener('click', createUsersForm);
+    const listBtn = document.getElementById('nav-list-btn');
+    const createBtn = document.getElementById('nav-create-btn');
+    const linBtn = document.getElementById('nav-login-btn');
+    const loutBtn = document.getElementById('nav-logout-btn');
+    
+    listBtn.addEventListener('click', printUserList);
+    createBtn.addEventListener('click', createUsersForm);
 
-
-if (!isLogged()) {
-    // IMP login
+    if (!localStorage.getItem("AuthToken")) {
+        if(linBtn) {
+            linBtn.style.display = 'block';
+            linBtn.addEventListener('click', () => {
+                printLoginForm();
+                
+                const setTokenLogin = document.getElementById("login-btn");
+                
+                if(setTokenLogin){
+                    setTokenLogin.addEventListener('click', async(e) => {
+                        e.preventDefault();
+                        await haciendoLogin();
+                        cargarNav();
+                    });
+                }
+            });
+        }
+        if(loutBtn){
+            loutBtn.style.display = 'none';
+        }
+    }
+    else {
+        if(loutBtn){
+            loutBtn.style.display = 'block';
+            loutBtn.addEventListener('click', () =>{
+                imDone();
+                cargarNav();
+            });
+        }
+        if(linBtn){
+            linBtn.style.display = 'none';
+        }
+    }
 }
-else {
-    // IMP nav y caratula
-}
+
+cargarNav();
