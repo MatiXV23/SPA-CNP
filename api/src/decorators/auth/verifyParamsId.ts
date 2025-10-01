@@ -7,7 +7,6 @@ export default fastifyPlugin(async function(fastify){
             const paramId = req.params.id_usuario;
             const bodyId = req.body?.id_usuario;
 
-            // Solo valida si el body trae id
             if (bodyId !== undefined && paramId !== bodyId) {
                 throw new PC_BadRequest("Los ids pasados como parámetro y en el body no coinciden");
     }})

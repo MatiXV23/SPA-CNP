@@ -6,7 +6,7 @@ import { Type } from "@sinclair/typebox"
 const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
     fastify.get("", {
-        preValidation: [fastify.authenticate],
+        onRequest: [fastify.authenticate],
         schema:{
             tags: ['Usuarios'],
             summary: 'Obtener usuario',
@@ -23,7 +23,7 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
 
     fastify.put("",{
-        preValidation: [fastify.authenticate, fastify.authorizeAdmin],
+        onRequest: [fastify.authenticate, fastify.authorizeAdmin],
         schema:{
             tags: ['Usuarios'],
             summary: 'Modificar usuario',
@@ -46,7 +46,7 @@ const usersByIdRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
     })
 
     fastify.delete("",{
-        preValidation: [fastify.authenticate, fastify.authorizeAdmin],
+        onRequest: [fastify.authenticate, fastify.authorizeAdmin],
         schema:{
             tags: ['Usuarios'],
             summary: 'Borra usuario',

@@ -12,19 +12,11 @@ const authRoute: FastifyPluginAsyncTypebox = async(server) =>{
             response: {
                 200: Type.Object({'token': Type.String()}),
             },
-            errorHandler: (err: Error, req: FastifyRequest, rep: FastifyReply) => {
-                if (err instanceof PC_NotFound) return rep.code(401).send({ error: 'Credenciales incorrectas!' });
-                console.error(err); 
-        return rep.code(500).send({ error: 'Error interno' });
-    }
-        },
+            
+      },
     }, async (request, reply) => {
       const cuenta = await server.UsersDB.getUserByCredentials(request.body);
-      const payload = {
-        sub: cuenta.id_usuario,
-        username: cuenta.username,
-        is_admin: cuenta.is_admin,
-      };
+      const payload = cuenta
       const token = server.jwt.sign(payload, { expiresIn: '8h' });
       return { token };
     }

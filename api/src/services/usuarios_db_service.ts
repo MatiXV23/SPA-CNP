@@ -1,6 +1,6 @@
 import { BasePgRepository } from "../model/baseRepository.ts";
 import  type { Usuario, Credenciales } from "../model/usuario_model.ts";
-import { PC_NotFound, PC_BadRequest } from "../errors/errors.ts";
+import { PC_NotFound, PC_BadRequest, PC_InternalServerError } from "../errors/errors.ts";
 import type { Pool } from "pg";
 
 export class UsuariosDB extends BasePgRepository<Usuario> {
@@ -51,9 +51,9 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
             return user
         }catch(err: any){
             if (err.code === "23505") {
-            throw new PC_BadRequest("El username ya existe")
-        }
-        throw err
+                throw new PC_BadRequest("El username ya existe")
+            }
+            throw new PC_InternalServerError()
         }
     }
 
@@ -101,14 +101,14 @@ export class UsuariosDB extends BasePgRepository<Usuario> {
         console.log(res)
     }
     
-    async getUserByCredentials(credenciales: Credenciales): Promise<any> {
+    async getUserByCredentials(credenciales: Credenciales): Promise<Usuario> {
         const query = this.#baseQuery + `JOIN credenciales c ON c.id_usuario = u.id_usuario
                                         WHERE u.username = $1 AND c.password_hash = crypt($2, password_hash)
                                         GROUP BY u.id_usuario;`
         const vars = [credenciales.username, credenciales.password]
         const res = await this.pool.query<Usuario>(query, vars)
         
-        if (res.rowCount === 0) throw new PC_NotFound(`Usuario no encontrado. Credenciales Incorrectas`)
+        if (res.rowCount === 0) throw new PC_NotFound(`Credenciales Incorrectas`)
 
         return res.rows[0]
     }
