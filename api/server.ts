@@ -5,6 +5,9 @@ import { fileURLToPath } from 'node:url'
 import autoLoad from '@fastify/autoload'
 import cors from "@fastify/cors";
 import { PC_Error, PC_InternalServerError } from "./src/errors/errors.ts";
+import jwtPlugin from './src/plugins/jwt.ts';
+import swaggerPlugin from './src/plugins/swagger.ts';
+import loginRoutes from './src/routes/login.ts';
 
 const archivo = fileURLToPath(import.meta.url)
 const ruta = join(dirname(archivo), 'src')
@@ -17,10 +20,12 @@ await server.register(cors, {
     methods: ["GET", "POST", "PUT", "DELETE"]
 });
 
+await server.register(jwtPlugin);
 
-await server.register(autoLoad, {
-    dir: join(ruta, 'plugins')
-})
+// await server.register(autoLoad, {
+//     dir: join(ruta, 'plugins')
+// })
+server.register(swaggerPlugin);
 
 await server.register(autoLoad, {
     dir: join(ruta, 'decorators')
@@ -28,11 +33,12 @@ await server.register(autoLoad, {
 
 server.register(autoLoad, {
     dir: join(ruta, 'routes'),
-    routeParams: true
+    routeParams: true,
 })
 
 const port = Number(process.env.API_PORT) || 3000;
 const host = '::';
+
 
 server.setErrorHandler((err: PC_Error, request, reply) => {
     if (!(err instanceof PC_Error)) err = new PC_InternalServerError()

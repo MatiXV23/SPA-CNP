@@ -9,12 +9,6 @@ export const usuarioSchema = Type.Object({
     nombres: Type.String({maxLength:50}),
 })
 
-export const queryUsuarioSchema = Type.Object({
-    nombres : Type.Optional(Type.String({maxLength: 50})),
-    username : Type.Optional(Type.String({maxLength: 15})),
-    is_admin: Type.Optional(Type.Boolean()),
-})
-
 export const credencialesSchema = Type.Object({
     username : Type.String({maxLength: 15, default: 'admin'}),
     password : Type.String({minLength: 2, default: 'contraseña'})

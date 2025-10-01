@@ -2,10 +2,12 @@ import {type FastifyPluginAsyncTypebox } from "@fastify/type-provider-typebox"
 import { usuarioSchema } from "../../model/usuario_model.ts"
 import { Type } from "@sinclair/typebox"
 
+
 const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
     fastify.get("", {
         schema:{
+            preValidation: [fastify.authenticate],
             tags: ['Usuarios'],
             summary: 'Obtener usuarios',
             description: 'Devuelve una lista de todos los usuarios', 
@@ -19,6 +21,7 @@ const usersRoutes: FastifyPluginAsyncTypebox = async (fastify) => {
 
 
     fastify.post("",{
+        preValidation: [fastify.authenticate, fastify.authorizeAdmin],
         schema:{ 
             tags: ['Usuarios'],
             summary: 'Crea usuario',
